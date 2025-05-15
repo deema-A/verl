@@ -39,9 +39,9 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    data_source = "openai/gsm8k"
+    data_source = "Deema/draft_gsm8k_test"
 
-    dataset = datasets.load_dataset(data_source, "main")
+    dataset = datasets.load_dataset(data_source, "default")
 
     train_dataset = dataset["train"]
     test_dataset = dataset["test"]
@@ -49,9 +49,9 @@ if __name__ == "__main__":
     instruction_following = 'Let\'s think step by step and output the final answer after "####".'
 
     # add a row to each data item that represents a unique id
-    def make_map__fn(split):
+    def make_map_fn(split):
         def process_fn(example, idx):
-            question_raw = example.pop("question")
+            question_raw = example.pop("original_question")
 
             question = question_raw + " " + instruction_following
 

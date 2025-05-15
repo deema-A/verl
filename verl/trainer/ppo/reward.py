@@ -56,6 +56,7 @@ def get_custom_reward_fn(config):
 
 def load_reward_manager(config, tokenizer, num_examine, **reward_kwargs):
     reward_manager_name = config.reward_model.get("reward_manager", "naive")
+    print(f"Deema Using reward manager: {reward_manager_name}")
     if reward_manager_name == "naive":
         from verl.workers.reward_manager import NaiveRewardManager
 
@@ -72,6 +73,10 @@ def load_reward_manager(config, tokenizer, num_examine, **reward_kwargs):
         from verl.workers.reward_manager import DAPORewardManager
 
         reward_manager_cls = DAPORewardManager
+    elif reward_manager_name == "trek":
+        from verl.workers.reward_manager import TREKRewardManager
+
+        reward_manager_cls = TREKRewardManager
     else:
         raise NotImplementedError
 
@@ -95,6 +100,32 @@ def compute_reward(data: DataProto, reward_fn):
         Tuple of reward tensor and extra info dictionary.
     """
     try:
+        print("Deema I am here") # was here
+        # print(f"Computing reward for data: {data.batch}")
+        """
+        Computing reward for data: TensorDict(
+        fields={
+            attention_mask: Tensor(shape=torch.Size([256, 768]), device=cpu, dtype=torch.int64, is_shared=False),
+            input_ids: Tensor(shape=torch.Size([256, 768]), device=cpu, dtype=torch.int64, is_shared=False),
+            position_ids: Tensor(shape=torch.Size([256, 768]), device=cpu, dtype=torch.int64, is_shared=False),
+            prompts: Tensor(shape=torch.Size([256, 512]), device=cpu, dtype=torch.int64, is_shared=False),
+            response_mask: Tensor(shape=torch.Size([256, 256]), device=cpu, dtype=torch.int64, is_shared=False),
+            responses: Tensor(shape=torch.Size([256, 256]), device=cpu, dtype=torch.int64, is_shared=False)
+        },
+        batch_size=torch.Size([256]),
+        device=None,
+        is_shared=False)
+        """
+        # print(f"Data batch keys: {data.batch.keys()}")
+        """
+        _StringKeys(dict_keys(['responses', 'attention_mask', 'input_ids', 'position_ids', 'prompts', 'response_mask']))
+        """
+        # print(f"data.batch['responses'][2]: {data.batch['responses'][2]}")
+        # tensor([  1249,   8253,   1246,   1657,  18636,
+        # print(f"data.batch['prompts'][2]: {data.batch['prompts'][2]}")
+        # tensor([151643, 151643, 151643, 151643, 151643, 1516
+        print(f"reward_fn: {reward_fn}")
+        # exit(0)
         reward_result = reward_fn(data, return_dict=True)
         reward_tensor = reward_result["reward_tensor"]
         reward_extra_infos_dict = reward_result["reward_extra_info"]

@@ -17,16 +17,16 @@ from collections import defaultdict
 import torch
 
 from verl import DataProto
-from verl.utils.reward_score import _default_compute_score
+from verl.utils.reward_score.trek_score import trek_default_compute_score
 
 
-class NaiveRewardManager:
+class TREKRewardManager:
     """The reward manager."""
 
     def __init__(self, tokenizer, num_examine, compute_score=None, reward_fn_key="data_source") -> None:
         self.tokenizer = tokenizer
         self.num_examine = num_examine  # the number of batches of decoded responses to print to the console
-        self.compute_score = compute_score or _default_compute_score
+        self.compute_score = compute_score or trek_default_compute_score
         self.reward_fn_key = reward_fn_key
 
     def __call__(self, data: DataProto, return_dict=False):
@@ -61,13 +61,24 @@ class NaiveRewardManager:
             # decode
             prompt_str = self.tokenizer.decode(valid_prompt_ids, skip_special_tokens=True)
             response_str = self.tokenizer.decode(valid_response_ids, skip_special_tokens=True)
-
+            
             ground_truth = data_item.non_tensor_batch["reward_model"]["ground_truth"]
-
+            print(f"Deema: ground_truth: {ground_truth=}")
+            # exit(0)
             data_source = data_item.non_tensor_batch[self.reward_fn_key]
 
             extra_info = data_item.non_tensor_batch.get("extra_info", None)
-
+            print(f"Deema: data_item: {data_item}")
+            """
+            single:
+            attention_mask
+            attention_mask: Tensor(shape=torch.Size([768]), device=cpu, dtype=torch.int64, is_shared=False)
+            input_ids
+            position_ids
+            prompts
+            response_mask
+            responses
+            """
             score = self.compute_score( 
                 data_source=data_source,
                 solution_str=response_str,

@@ -1,7 +1,7 @@
 data:
   tokenizer: null
-  train_files: ~/data/rlhf/gsm8k/train.parquet
-  val_files: ~/data/rlhf/gsm8k/test.parquet
+  train_files: /projects/illinois/eng/cs/haopeng/deema/TREK/datasets/gsm_math/masked/0000.parquet
+  val_files: /projects/illinois/eng/cs/haopeng/deema/TREK/datasets/gsm_math/masked/0000.parquet
   prompt_key: prompt
   reward_fn_key: data_source
   max_prompt_length: 512
@@ -195,7 +195,7 @@ reward_model:
   ulysses_sequence_parallel_size: 1 # sp size
   use_dynamic_bsz: ${critic.use_dynamic_bsz}
   forward_max_token_len_per_gpu: ${critic.forward_max_token_len_per_gpu}
-  reward_manager: naive
+  reward_manager: trek
   launch_reward_fn_async: False # custom reward function executed async on CPU, during log_prob
 
 custom_reward_function:
@@ -220,7 +220,7 @@ trainer:
   total_epochs: 30
   total_training_steps: null
   project_name: verl_examples
-  experiment_name: gsm8k
+  experiment_name: trek_test
   logger: [ 'console', 'wandb' ]
   log_val_generations: 0
   rollout_data_dir: null # directory for logging the rollout data, no dump if null

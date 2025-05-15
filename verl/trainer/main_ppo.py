@@ -65,6 +65,9 @@ def main(config):
 
 
 def run_ppo(config) -> None:
+    print("Running PPO...")
+    print(f"Using config: {config}")
+    # exit(0)
     if not ray.is_initialized():
         # this is for local ray cluster
         ray.init(

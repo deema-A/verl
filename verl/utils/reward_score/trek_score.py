@@ -13,13 +13,15 @@
 # limitations under the License.
 # from . import gsm8k, math, prime_math, prime_code
 
-from .trek_score import trek_default_compute_score
 
-def _default_compute_score(data_source, solution_str, ground_truth, extra_info=None):
+def trek_default_compute_score(data_source, solution_str, ground_truth, extra_info=None):
+    print(f"Deema: data_source: {data_source=}, solution_str: {solution_str=}, ground_truth: {ground_truth=}, extra_info: {extra_info=}")
+    # exit(0)
     if data_source == "openai/gsm8k":
-        from . import gsm8k
+        # from . import gsm8k
+        from . import gsm8k_trek
 
-        res = gsm8k.compute_score(solution_str, ground_truth)
+        res = gsm8k_trek.compute_score(solution_str, ground_truth, extra_info=extra_info)
     elif data_source in ["lighteval/MATH", "DigitalLearningGmbH/MATH-lighteval"]:
         from . import math
 

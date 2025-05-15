@@ -136,6 +136,7 @@ class RLHFDataset(Dataset):
         return len(self.dataframe)
 
     def _build_messages(self, example: dict):
+        print(f"Deema: _example: {example}")
         messages: list = example.pop(self.prompt_key)
 
         if self.image_key in example or self.video_key in example:
