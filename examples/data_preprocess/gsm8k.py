@@ -49,7 +49,7 @@ if __name__ == "__main__":
     instruction_following = 'Let\'s think step by step and output the final answer after "####".'
 
     # add a row to each data item that represents a unique id
-    def make_map__fn(split):
+    def make_map_fn(split):
         def process_fn(example, idx):
             question_raw = example.pop("question")
 
