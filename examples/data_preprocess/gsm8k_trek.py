@@ -34,26 +34,26 @@ def extract_solution(solution_str):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--local_dir", default="~/data/gsm8k")
+    parser.add_argument("--local_dir", default="~/data/gsm8k_trek")
     parser.add_argument("--hdfs_dir", default=None)
 
     args = parser.parse_args()
 
-    data_source = "Deema/draft_gsm8k_test"
+    data_source = "Deema/GSM8K_Masked"
 
     dataset = datasets.load_dataset(data_source, "default")
 
     train_dataset = dataset["train"]
     test_dataset = dataset["test"]
 
-    instruction_following = 'Let\'s think step by step and output the final answer after "####".'
+    instruction_following = 'You are a patient math tutor. When given a masked problem with placeholders (e.g., [NUMBER], [UNIT], [VALUE]), return concise, step-by-step reasoning guidelines that let a student solve the problem for any values. Never compute or replace the placeholders; output only the guidelines.'
 
     # add a row to each data item that represents a unique id
     def make_map_fn(split):
         def process_fn(example, idx):
             question_raw = example.pop("original_question")
 
-            question = question_raw + " " + instruction_following
+            # question = instruction_following + "\nProblem:" + question_raw
 
             answer_raw = example.pop("answer")
             solution = extract_solution(answer_raw)
@@ -61,8 +61,12 @@ if __name__ == "__main__":
                 "data_source": data_source,
                 "prompt": [
                     {
+                        "role": "system",
+                        "content": instruction_following,  
+                    },
+                    {
                         "role": "user",
-                        "content": question,
+                        "content": question_raw,
                     }
                 ],
                 "ability": "math",
