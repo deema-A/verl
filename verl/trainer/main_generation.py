@@ -102,8 +102,6 @@ def main_task(config):
             return_dict=True,
             tokenize=True,
         )
-        print("DEEMAA 7")
-        # exit(0)
         input_ids = inputs["input_ids"]
         attention_mask = inputs["attention_mask"]
         position_ids = compute_position_id_with_mask(attention_mask)

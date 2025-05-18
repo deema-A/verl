@@ -113,8 +113,6 @@ class RLHFDataset(Dataset):
 
         # filter out too long prompts
         if self.filter_overlong_prompts:
-            print("DEEEMMMAAA")
-            # exit(0)
             tokenizer = self.tokenizer
             prompt_key = self.prompt_key
             self.dataframe = self.dataframe.filter(
@@ -138,7 +136,6 @@ class RLHFDataset(Dataset):
         return len(self.dataframe)
 
     def _build_messages(self, example: dict):
-        print("DEEMA IAM HEREEEEe")
         messages: list = example.pop(self.prompt_key)
 
         if self.image_key in example or self.video_key in example:
@@ -154,7 +151,6 @@ class RLHFDataset(Dataset):
                         content_list.append({"type": "text", "text": segment})
 
                 message["content"] = content_list
-        print("DEEMAA 111111$$$$$$$$1,", messages)
         return messages
 
     def __getitem__(self, item):
@@ -169,8 +165,6 @@ class RLHFDataset(Dataset):
             from verl.utils.dataset.vision_utils import process_image, process_video
 
             raw_prompt = self.processor.apply_chat_template(messages, add_generation_prompt=True, tokenize=False)
-            print("DEEMAA 5")
-            # exit(0)
             multi_modal_data = {}
 
             images = None
