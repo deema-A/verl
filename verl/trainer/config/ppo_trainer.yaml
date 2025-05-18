@@ -87,17 +87,17 @@ actor_rollout_ref:
     log_prob_max_token_len_per_gpu: ${actor_rollout_ref.actor.ppo_max_token_len_per_gpu}
     ulysses_sequence_parallel_size: ${actor_rollout_ref.actor.ulysses_sequence_parallel_size} # sp size
   rollout:
-    name: vllm
+    name: hf # vllm
     mode: sync # sync: LLM, async: AsyncLLM
     chat_scheduler: null # async chat scheduler, e.g examples.ppo_trainer.naive_chat_scheduler.NaiveChatCompletionScheduler
-    temperature: 1.0
-    top_k: -1 # 0 for hf rollout, -1 for vllm rollout
-    top_p: 1
+    temperature: 0.0 #1.0
+    top_k: 0 #-1 # 0 for hf rollout, -1 for vllm rollout
+    top_p: None #1
     use_fire_sampling: False # https://arxiv.org/abs/2410.21236
     prompt_length: ${data.max_prompt_length}  # not use for opensource
     response_length: ${data.max_response_length}
     # for vllm rollout
-    dtype: bfloat16 # should align with FSDP
+    dtype: float16 #bfloat16 # should align with FSDP
     gpu_memory_utilization: 0.5
     ignore_eos: False
     enforce_eager: True
@@ -114,7 +114,7 @@ actor_rollout_ref:
     disable_log_stats: True
     enable_chunked_prefill: True # may get higher throughput when set to True. When activated, Please increase max_num_batched_tokens or decrease max_model_len.
     # for hf rollout
-    do_sample: True
+    do_sample: False #True
     # number of responses (i.e. num sample times)
     n: 1 # > 1 for grpo
     engine_kwargs: # inference engine parameters
@@ -196,7 +196,7 @@ reward_model:
   ulysses_sequence_parallel_size: 1 # sp size
   use_dynamic_bsz: ${critic.use_dynamic_bsz}
   forward_max_token_len_per_gpu: ${critic.forward_max_token_len_per_gpu}
-  reward_manager: trek
+  reward_manager: naive
   launch_reward_fn_async: False # custom reward function executed async on CPU, during log_prob
 
 custom_reward_function:

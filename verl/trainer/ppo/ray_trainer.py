@@ -564,7 +564,8 @@ class RayPPOTrainer:
 
         for test_data in self.val_dataloader:
             test_batch = DataProto.from_single_dict(test_data)
-
+            # print("DEEEMAA test_batch", test_batch)
+            # print("###########################################")
             # repeat test batch
             test_batch = test_batch.repeat(repeat_times=self.config.actor_rollout_ref.rollout.val_kwargs.n, interleave=True)
 
@@ -599,11 +600,14 @@ class RayPPOTrainer:
                 "validate": True,
             }
             print(f"test_gen_batch meta info: {test_gen_batch.meta_info}")
-
+            
             # pad to be divisible by dp_size
+            # print("DEEEMA test_gen_batch", test_gen_batch)
             test_gen_batch_padded, pad_size = pad_dataproto_to_divisor(test_gen_batch, self.actor_rollout_wg.world_size)
-            if not self.async_rollout_mode:
+            if not self.async_rollout_mode: #this generates deema
                 test_output_gen_batch_padded = self.actor_rollout_wg.generate_sequences(test_gen_batch_padded)
+                # print(" DEEMA: test_output_gen_batch_padded", test_output_gen_batch_padded)
+                # print("DEEEMA actor_rollout_wg", self.actor_rollout_wg)
             else:
                 self.async_rollout_manager.wake_up()
                 test_output_gen_batch_padded = self.async_rollout_manager.generate_sequences(test_gen_batch_padded)
@@ -616,6 +620,10 @@ class RayPPOTrainer:
             # Store generated outputs
             output_ids = test_output_gen_batch.batch["responses"]
             output_texts = [self.tokenizer.decode(ids, skip_special_tokens=True) for ids in output_ids]
+            # print("DEEEMA output_texts", output_texts[0])
+            # print("input_ids", input_ids)
+            # print("output_ids[0]", output_ids[0])
+            # print("DEEEMA input", [self.tokenizer.decode(ids, skip_special_tokens=True) for ids in input_ids])
             sample_outputs.extend(output_texts)
 
             test_batch = test_batch.union(test_output_gen_batch)

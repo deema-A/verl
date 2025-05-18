@@ -51,7 +51,7 @@ if __name__ == "__main__":
     # add a row to each data item that represents a unique id
     def make_map_fn(split):
         def process_fn(example, idx):
-            question_raw = example.pop("original_question")
+            question_raw = example.pop("masked_question")
 
             # question = instruction_following + "\nProblem:" + question_raw
 
@@ -59,23 +59,52 @@ if __name__ == "__main__":
             solution = extract_solution(answer_raw)
             data = {
                 "data_source": data_source,
-                "prompt": [
-                    {
-                        "role": "system",
-                        "content": instruction_following,  
-                    },
-                    {
-                        "role": "user",
-                        "content": question_raw,
-                    }
-                ],
+                # "prompt": [
+                #     {
+                #         "role": "system",
+                #         "content": instruction_following,  
+                #     },
+                #     {
+                #         "role": "user",
+                #         "content": question_raw,
+                #     }
+                # ],
+                "prompt": f"""You are a math tutor helping students understand how to solve word problems that include placeholders like [NUMBER], [UNIT], or [AMOUNT].\
+Your job is to write clear, concise step-by-step reasoning guidelines that explain how to approach and solve the problem — **without replacing or computing any placeholders**.
+Focus on explaining the logic behind each step, as if teaching a student how to think through it.  
+**Never give a final answer. Just explain the reasoning.**
+
+Problem:
+Janet’s ducks lay [NUMBER] eggs per day. She eats [NUMBER] for breakfast every morning and bakes muffins for her friends every day with [NUMBER]. She sells the remainder at the farmers' market daily for $[AMOUNT] per fresh duck egg. How much in dollars does she make every day at the farmers' market?
+
+Reasoning guidelines:
+1. Identify how many eggs Janet's ducks lay each day: [NUMBER].
+2. Determine how many eggs she uses for breakfast each day: [NUMBER].
+3. Determine how many eggs she uses to bake muffins: [NUMBER].
+4. Add together the eggs used for breakfast and baking to find total eggs used.
+5. Subtract the total eggs used from the number of eggs laid to find how many eggs are left to sell.
+6. Multiply the number of eggs she sells by the price per egg: $[AMOUNT].
+7. This product gives the amount she earns each day at the farmers' market.
+
+
+You are a math tutor helping students understand how to solve word problems that include placeholders like [NUMBER], [UNIT], or [AMOUNT].\
+Your job is to write clear, concise step-by-step reasoning guidelines that explain how to approach and solve the problem — **without replacing or computing any placeholders**.
+Focus on explaining the logic behind each step, as if teaching a student how to think through it.  
+**Never give a final answer. Just explain the reasoning.**
+
+Problem:
+{question_raw}
+
+Reasoning guidelines:
+""",
                 "ability": "math",
                 "reward_model": {"style": "rule", "ground_truth": solution},
                 "extra_info": {
                     "split": split,
                     "index": idx,
                     "answer": answer_raw,
-                    "question": question_raw,
+                    "masked_question": question_raw,
+                    "original_question": example.pop("original_question"),
                 },
             }
             return data

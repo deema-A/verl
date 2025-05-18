@@ -178,7 +178,8 @@ class vLLMRollout(BaseRollout):
     @GPUMemoryLogger(role="vllm rollout spmd", logger=logger)
     @torch.no_grad()
     def generate_sequences(self, prompts: DataProto, **kwargs) -> DataProto:
-        # rebuild vllm cache engine
+        print("I am here Deema generate_sequences/projects/illinois/eng/cs/haopeng/deema/TREK/verl/verl/workers/rollout/vllm_rollout/vllm_rollout.py")
+        # rebuild vllm cacshe engine
         if self.config.free_cache_engine:
             self.inference_engine.init_cache_engine()
 

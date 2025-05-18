@@ -42,6 +42,7 @@ class HFRollout(BaseRollout):
         self.module = module
 
     def generate_sequences(self, prompts: DataProto) -> DataProto:
+        print("I am here Deema generate_sequences /projects/illinois/eng/cs/haopeng/deema/TREK/verl/verl/workers/rollout/hf_rollout.py")
         batch_size = prompts.batch.batch_size[0]
         num_chunks = max(batch_size // self.config.get("micro_batch_size", batch_size), 1)
         batch_prompts = prompts.chunk(chunks=num_chunks)
@@ -98,7 +99,7 @@ class HFRollout(BaseRollout):
         # used to construct attention_mask
         eos_token_id = prompts.meta_info["eos_token_id"]
         pad_token_id = prompts.meta_info["pad_token_id"]
-
+        # print("DEEEMaa pad_token_id", pad_token_id)
         self.module.eval()
         param_ctx = contextlib.nullcontext()
 
@@ -142,7 +143,7 @@ class HFRollout(BaseRollout):
 
         prompt = seq[:, :prompt_length]  # (generated_batch_size, prompt_length)
         response = seq[:, prompt_length:]  # (generated_batch_size, response_length)
-
+        # print("response DEEEEMAAAAAA", response)
         response_length = response.size(1)
         delta_position_id = torch.arange(1, response_length + 1, device=position_ids.device)
         delta_position_id = delta_position_id.unsqueeze(0).repeat(generated_batch_size, 1)

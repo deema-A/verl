@@ -125,7 +125,6 @@ def compute_reward(data: DataProto, reward_fn):
         # print(f"data.batch['prompts'][2]: {data.batch['prompts'][2]}")
         # tensor([151643, 151643, 151643, 151643, 151643, 1516
         print(f"reward_fn: {reward_fn}")
-        # exit(0)
         reward_result = reward_fn(data, return_dict=True)
         reward_tensor = reward_result["reward_tensor"]
         reward_extra_infos_dict = reward_result["reward_extra_info"]

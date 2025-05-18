@@ -49,6 +49,8 @@ class NaiveRollout(BaseRollout):
 
     @torch.no_grad()
     def generate_sequences(self, prompts: DataProto) -> DataProto:
+        print("I am here Deema generate_sequences /projects/illinois/eng/cs/haopeng/deema/TREK/verl/verl/workers/rollout/naive/naive_rollout.py")
+
         """Generate sequences"""
         idx = prompts.batch["input_ids"]  # (bs, prompt_length)
         attention_mask = prompts.batch["attention_mask"]  # left-padded attention_mask

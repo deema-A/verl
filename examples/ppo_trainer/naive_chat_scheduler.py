@@ -29,6 +29,7 @@ class NaiveChatCompletionScheduler(ChatCompletionScheduler):
     """
 
     async def generate_sequences(self, batch: DataProto, **sampling_params) -> DataProto:
+        print("I am here Deema generate_sequences/projects/illinois/eng/cs/haopeng/deema/TREK/verl/examples/ppo_trainer/naive_chat_scheduler.py")
         kwargs = dict(
             n=self.config.n,
             max_completion_tokens=self.config.response_length,
@@ -97,7 +98,8 @@ class NaiveChatCompletionScheduler(ChatCompletionScheduler):
 
         # prompts: [prompt] from input dataset
         prompts = [self.tokenizer.apply_chat_template(prompt, add_generation_prompt=True, tokenize=False) for prompt in batch.non_tensor_batch["raw_prompt"]]
-
+        print("DEEMAA 8")
+        # exit(0)
         # flatten batch_conversations if n > 1
         assert len(batch_conversations) == len(prompts)
         batch_conversations = [conversation for conversations in batch_conversations for conversation in conversations]

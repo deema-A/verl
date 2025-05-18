@@ -233,6 +233,8 @@ class SGLangRollout(BaseRollout):
     @GPUMemoryLogger(role="sglang rollout", logger=logger)
     @torch.no_grad()
     def generate_sequences(self, prompts: DataProto, **kwargs) -> DataProto:
+        print("I am here Deema generate_sequences /projects/illinois/eng/cs/haopeng/deema/TREK/verl/verl/workers/rollout/sglang_rollout/sglang_rollout.py")
+
         # if self.config.free_cache_engine:
 
         idx = prompts.batch["input_ids"]  # (bs, prompt_length)

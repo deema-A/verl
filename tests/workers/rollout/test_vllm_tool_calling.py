@@ -124,6 +124,8 @@ class ToolChatCompletionScheduler(NaiveChatCompletionScheduler):
             await session.close()
 
     async def generate_sequences(self, batch: DataProto, **sampling_params) -> DataProto:
+        print("I am here Deema generate_sequences /projects/illinois/eng/cs/haopeng/deema/TREK/verl/tests/workers/rollout/test_vllm_tool_calling.py")
+
         kwargs = dict(
             n=self.config.n,
             max_completion_tokens=self.config.response_length,
