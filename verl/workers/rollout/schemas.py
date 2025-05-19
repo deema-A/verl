@@ -95,8 +95,6 @@ class AsyncRolloutRequest(BaseModel):
     }
 
     def get_generation_prompt(self, tokenizer: PreTrainedTokenizer) -> str:
-        print("DEEMAA 2")
-        # exit(0)
         return tokenizer.apply_chat_template(  # type: ignore
             conversation=[msg.model_dump() for msg in self.messages],
             tools=[tool.model_dump() for tool in self.tools] if self.tools else None,
@@ -119,8 +117,6 @@ class AsyncRolloutRequest(BaseModel):
             content_with_tool_calls: str = tokenizer.apply_chat_template(  # type: ignore
                 conversation=[msg.model_dump()], add_generation_prompt=False, tokenize=False
             )
-            print("DEEMAA 3")
-            # exit(0)
         else:
             content_with_tool_calls = content
         # TODO: support other formats

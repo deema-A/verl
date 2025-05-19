@@ -331,7 +331,6 @@ class AsyncLLMServerManager:
         future.result()
 
     def generate_sequences(self, prompts: DataProto, **sampling_params) -> DataProto:
-        print("I am here Deema generate_sequences /projects/illinois/eng/cs/haopeng/deema/TREK/verl/verl/workers/rollout/async_server.py")
 
         """Generate multiple sequences in parallel via chat scheduler."""
         assert self.chat_scheduler is not None, "chat scheduler is not initialized."

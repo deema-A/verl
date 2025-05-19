@@ -287,7 +287,6 @@ class AsyncSGLangRollout(BaseRollout):
     @torch.no_grad()
     def generate_sequences(self, prompts: DataProto, **kwargs) -> DataProto:
         # if self.config.free_cache_engine:
-        print("I am here Deema generate_sequences /projects/illinois/eng/cs/haopeng/deema/TREK/verl/verl/workers/rollout/sglang_rollout/async_sglang_rollout.py")
 
         idx = prompts.batch["input_ids"]  # (bs, prompt_length)
         # left-padded attention_mask
@@ -703,8 +702,6 @@ class AsyncSGLangRollout(BaseRollout):
                         tokenize=False,
                         return_tensors="pt",
                     )
-                    print("DEEMAA 1")
-                    # exit(0)
                     input_data = self.tokenizer(prompt_with_chat_template, return_tensors="pt", add_special_tokens=False)
                     _input_ids = input_data["input_ids"][0].tolist()
                     _attention_mask = input_data["attention_mask"][0].tolist()

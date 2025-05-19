@@ -50,7 +50,6 @@ def extract_solution(solution_str, method="strict"):
 # ----------------------------------------------------------------------------
 
 def _get_student_model():
-    print("DEEEEMMMMAAAA, DEEMA , Deema #########**********###############")
     """Load the student model / tokenizer the first time we need them."""
     tokenizer = AutoTokenizer.from_pretrained(STUDENT_MODEL_NAME, trust_remote_code=True)
     model = AutoModelForCausalLM.from_pretrained(
@@ -162,21 +161,17 @@ def compute_score(
     
     # # Keep only the part generated *after* the prompt
     student_answer = generated_text[len(prompt):].strip()
-    # print("DEEEMA, prompt", prompt)
-    # print("#######\n")
-    # print("DEEEMA, solution_str", solution_str)
-    # print("########\n")
-    # # exit(0)
-    # print("DEEEMA, original_question", extra_info["original_question"])
-    # print("########\n")
-    # print("DEEEMA, student_answer", student_answer)
-    # # exit(0)
-    # # Use existing util to grab the final numeric/text answer after '####'
     answer = extract_solution(solution_str=student_answer, method=method)
-    # answer = 3
+    # print("DEEEMA, solution_str", solution_str)
+    # print("DEEEMA, student_answer", student_answer)
+    # print("DEEEMA, answer", answer)
+    # print("DEEEMA, ground_truth", ground_truth)
     if answer is None:
+        print("[STUDENT DEEMA] No answer found in the student model's output.")
         return 0.0
     elif answer == ground_truth:
+        print("[STUDENT DEEMA] Correct answer found in the student model's output.")
         return score
     else:
+        print("[STUDENT DEEMA] Incorrect answer found in the student model's output.")
         return format_score

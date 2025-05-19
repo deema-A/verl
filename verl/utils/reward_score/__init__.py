@@ -63,10 +63,6 @@ def _default_compute_score(data_source, solution_str, ground_truth, extra_info=N
         from . import geo3k
 
         res = geo3k.compute_score(solution_str, ground_truth)
-    # elif data_source== "Deema/GSM8K_Masked":
-    #     from . import gsm8k_trek
-        
-    #     res = gsm8k_trek.compute_score(solution_str, ground_truth, tokenizer, model, extra_info=extra_info)
     else:
         raise NotImplementedError(f"Reward function is not implemented for {data_source=}")
 

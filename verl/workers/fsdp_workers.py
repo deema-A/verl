@@ -600,8 +600,6 @@ class ActorRolloutRefWorker(Worker):
             "pad_token_id": self.generation_config.pad_token_id if self.generation_config.pad_token_id is not None else self.tokenizer.pad_token_id,
         }
         prompts.meta_info.update(meta_info)
-        # print(f"DEEEMAAAA prompts pad_token_id info: {prompts.meta_info['pad_token_id']}")
-        # print(f"DEEEMAAAA prompts self.tokenizer.generation_config: {self.generation_config}")
         with self.rollout_sharding_manager:
             log_gpu_memory_usage("After entering rollout sharding manager", logger=logger)
 
@@ -1080,7 +1078,6 @@ class RewardModelWorker(Worker):
             input_tokenizer_local_path = copy_to_local(config.model.input_tokenizer)
             self.input_tokenizer = hf_tokenizer(input_tokenizer_local_path, trust_remote_code=config.model.get("trust_remote_code", False))
             self.tokenizer = hf_tokenizer(local_path, trust_remote_code=config.model.get("trust_remote_code", False))
-        # print(f"DEEEMAAAA self._do_switch_chat_template: {self.self._do_switch_chat_template}")
         trust_remote_code = config.model.get("trust_remote_code", False)
         model_config = AutoConfig.from_pretrained(local_path, trust_remote_code=trust_remote_code)
         model_config.num_labels = 1
@@ -1233,8 +1230,6 @@ class RewardModelWorker(Worker):
             chat.append({"role": "assistant", "content": response})
 
             prompt_with_chat_template = target_tokenizer.apply_chat_template(chat, add_generation_prompt=False, tokenize=False)
-            print("DEEMAA 4")
-            # exit(0)
             if self.rank == 0 and i == 0:
                 # for debugging purpose
                 print(f"Switch template. chat: {prompt_with_chat_template}")

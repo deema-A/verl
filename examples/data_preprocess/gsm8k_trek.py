@@ -40,6 +40,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     data_source = "Deema/GSM8K_Masked"
+    # data_source = "Deema/GSM8K_Masked_Sample"
 
     dataset = datasets.load_dataset(data_source, "default")
 
